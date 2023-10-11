@@ -91,15 +91,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => AiBarcodeScanner(
-                              canPop: false,
-                              appBar:
-                                  AppBar(title: const Text("Scan Equipment")),
-                              onScan: (value) {
-                                if (scanning) {
-                                  scanning = false;
-                                  Navigator.of(context).pop();
+                                canPop: scanning,
+                                appBar:
+                                    AppBar(title: const Text("Scan Equipment")),
+                                onScan: (value) {
                                   try {
-                                    Navigator.of(context).pop();
+                                    scanning = false;
                                     int id = int.parse(value);
                                     setState(() {
                                       loading = true;
@@ -132,9 +129,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                 Text("Invalid code scanned")));
                                     return;
                                   }
-                                }
-                              },
-                            ),
+                                }),
                           ),
                         );
                       })),
