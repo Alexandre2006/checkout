@@ -173,6 +173,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                     setState(() {
                       loading = false;
+                      Navigator.of(context).pop();
                     });
                   },
                 ),
