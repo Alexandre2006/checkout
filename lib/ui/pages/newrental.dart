@@ -96,6 +96,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     AppBar(title: const Text("Scan Equipment")),
                                 onScan: (value) {
                                   try {
+                                    print("Scanned: $value");
                                     int id = int.parse(value);
                                     setState(() {
                                       loading = true;
