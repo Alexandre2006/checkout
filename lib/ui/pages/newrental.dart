@@ -18,7 +18,6 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   int currentScreen = 0;
   bool loading = false;
-  bool scanning = false;
   DateTime endDate = DateTime.now().add(Duration(days: 1));
   List<CheckoutEquipment> equipment = [];
 
@@ -87,16 +86,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () {
-                        scanning = true;
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => AiBarcodeScanner(
-                                canPop: scanning,
+                                controller: MobileScannerController(
+                                    detectionSpeed:
+                                        DetectionSpeed.noDuplicates),
                                 appBar:
                                     AppBar(title: const Text("Scan Equipment")),
                                 onScan: (value) {
                                   try {
-                                    scanning = false;
                                     int id = int.parse(value);
                                     setState(() {
                                       loading = true;
