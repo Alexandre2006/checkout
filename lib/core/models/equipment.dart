@@ -1,9 +1,9 @@
 class CheckoutEquipment {
-  String uuid;
+  int id;
   String name;
 
   CheckoutEquipment({
-    required this.uuid,
+    required this.id,
     required this.name,
   });
 }

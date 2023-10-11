@@ -1,5 +1,9 @@
+import 'package:checkout/core/models/rental.dart';
+import 'package:checkout/core/services/authcheck.dart';
+import 'package:checkout/core/services/rentals.dart';
+import 'package:checkout/ui/shared/widgets/checkout.dart';
 import 'package:flutter/material.dart';
-import 'package:checkout/utils/globals.dart' as globals;
+import 'package:flutter/scheduler.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,10 +17,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
+      int authState = await getAuthState();
+      if (authState == -1) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/autherror', (Route<dynamic> route) => false);
+      } else if (authState == 0) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/signin', (Route<dynamic> route) => false);
+      }
+    });
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Yearbook Checkout"),
-      ),
       body: Center(
         child: currentScreen == 0
             ? const EquipmentScreen()
@@ -48,32 +59,90 @@ class EquipmentScreen extends StatefulWidget {
 }
 
 class _EquipmentScreenState extends State<EquipmentScreen> {
+  List<CheckoutRental> rentals = [];
+  bool loading = true;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        loading = true;
+      });
+      getUserRentals().then((value) {
+        setState(() {
+          rentals = value;
+          loading = false;
+        });
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Yearbook Checkout"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: () async {
+              setState(() {
+                loading = true;
+              });
+              rentals = await getUserRentals();
+              setState(() {
+                loading = false;
+              });
+            },
+          )
+        ],
+      ),
       body: RefreshIndicator(
-        child: ListView.builder(
-          itemBuilder: (context, index) {
-            String full_name =
-                globals.supabase.auth.currentUser?.userMetadata?['full_name'];
-            return ListTile(
-              title: Text(
-                  "$full_name is checking out item $index for the yearbook"),
-              subtitle: Text("Item $index"),
-              trailing: IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () {},
-              ),
-            );
-          },
-          itemCount: 10,
+        child: ListView(
+          children: rentals
+              .map((e) => CheckoutListTile(
+                    rental: e,
+                    rebuildCallback: () {
+                      setState(() {
+                        loading = true;
+                      });
+                      getUserRentals().then((value) {
+                        setState(() {
+                          rentals = value;
+                          loading = false;
+                        });
+                      });
+                    },
+                  ))
+              .toList(),
         ),
-        onRefresh: () async {},
+        onRefresh: () async {
+          setState(() {
+            loading = true;
+          });
+          rentals = await getUserRentals();
+          setState(() {
+            loading = false;
+          });
+        },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        label: Text("Checkout"),
-        icon: Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).pushNamed('/checkout').then((value) {
+            setState(() {
+              loading = true;
+            });
+            getUserRentals().then((value) {
+              setState(() {
+                rentals = value;
+                loading = false;
+              });
+            });
+          });
+        },
+        label: const Text("Checkout"),
+        icon: const Icon(Icons.add),
       ),
     );
   }

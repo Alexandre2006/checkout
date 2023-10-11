@@ -13,6 +13,8 @@ dependencies:
   supabase_flutter: ^1.10.21
   flutter_svg: ^2.0.7
   oktoast: ^3.3.2
+  ai_barcode_scanner: ^3.4.1
+  mobile_scanner: ^3.4.1
 
 dev_dependencies:
   flutter_test:

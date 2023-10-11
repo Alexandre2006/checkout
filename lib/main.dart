@@ -1,6 +1,5 @@
 import 'package:checkout/utils/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -18,14 +17,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OKToast(
-        child: MaterialApp(
+    return MaterialApp(
       title: 'Yearbook Checkout',
       initialRoute: '/signin',
       routes: routes,
-      themeMode: ThemeMode.dark,
       darkTheme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
-    ));
+    );
   }
 }

@@ -4,9 +4,10 @@ import 'package:checkout/core/models/user.dart';
 class CheckoutRental {
   final String uuid;
   final DateTime start;
-  final DateTime end;
+  DateTime end;
   final List<CheckoutEquipment> equipment;
   final CheckoutUser renter;
+  bool returned;
 
   CheckoutRental({
     required this.uuid,
@@ -14,5 +15,6 @@ class CheckoutRental {
     required this.end,
     required this.equipment,
     required this.renter,
+    required this.returned,
   });
 }
