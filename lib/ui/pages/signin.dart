@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:checkout/core/services/authcheck.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';

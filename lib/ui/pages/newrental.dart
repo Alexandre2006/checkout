@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 import 'package:checkout/core/models/equipment.dart';
 import 'package:checkout/core/services/authcheck.dart';
