@@ -18,6 +18,7 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   int currentScreen = 0;
   bool loading = false;
+  bool canScan = false;
   DateTime endDate = DateTime.now().add(Duration(days: 1));
   List<CheckoutEquipment> equipment = [];
 
@@ -86,48 +87,55 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   trailing: IconButton(
                       icon: const Icon(Icons.add),
                       onPressed: () {
+                        canScan = true;
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => AiBarcodeScanner(
                                 controller: MobileScannerController(
                                     detectionSpeed:
                                         DetectionSpeed.noDuplicates),
+                                canPop: false,
                                 appBar:
                                     AppBar(title: const Text("Scan Equipment")),
                                 onScan: (value) {
-                                  try {
-                                    print("Scanned: $value");
-                                    int id = int.parse(value);
-                                    setState(() {
-                                      loading = true;
-                                    });
-                                    getEquipment(id).then((value) {
+                                  if (canScan) {
+                                    Navigator.of(context).pop();
+                                    canScan = false;
+                                    try {
+                                      int id = int.parse(value);
                                       setState(() {
-                                        if (value.id == 0) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                                  content: Text(
-                                                      "Equipment not found")));
-                                          loading = false;
-                                        } else {
-                                          if (equipment.contains(value)) {
+                                        loading = true;
+                                      });
+                                      getEquipment(id).then((value) {
+                                        setState(() {
+                                          if (value.id == 0) {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(const SnackBar(
                                                     content: Text(
-                                                        "Equipment already added")));
+                                                        "Equipment not found")));
+                                            loading = false;
                                           } else {
-                                            equipment.add(value);
+                                            if (equipment
+                                                .where((element) =>
+                                                    element.id == value.id)
+                                                .isNotEmpty) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                      content: Text(
+                                                          "Equipment already added")));
+                                            } else {
+                                              equipment.add(value);
+                                            }
+                                            loading = false;
                                           }
-                                          loading = false;
-                                        }
+                                        });
                                       });
-                                    });
-                                  } catch (e) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content:
-                                                Text("Invalid code scanned")));
-                                    return;
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                              content: Text(
+                                                  "Invalid code scanned")));
+                                    }
                                   }
                                 }),
                           ),
