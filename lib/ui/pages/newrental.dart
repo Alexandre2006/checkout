@@ -89,10 +89,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => AiBarcodeScanner(
+                              canPop: false,
                               appBar:
                                   AppBar(title: const Text("Scan Equipment")),
                               onScan: (value) {
                                 try {
+                                  Navigator.of(context).pop();
                                   int id = int.parse(value);
                                   setState(() {
                                     loading = true;
@@ -106,7 +108,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                     "Equipment not found")));
                                         loading = false;
                                       } else {
-                                        equipment.add(value);
+                                        if (equipment.contains(value)) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      "Equipment already added")));
+                                        } else {
+                                          equipment.add(value);
+                                        }
                                         loading = false;
                                       }
                                     });
