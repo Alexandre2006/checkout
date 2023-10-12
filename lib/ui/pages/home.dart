@@ -73,12 +73,25 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
       });
       getUserRentals().then((value) {
         setState(() {
-          rentals = value;
+          rentals = sortRentals(value);
           loading = false;
         });
       });
     });
     super.initState();
+  }
+
+  List<CheckoutRental> sortRentals(List<CheckoutRental> rentals) {
+    rentals.sort((a, b) {
+      if (a.returned && !b.returned) {
+        return 1;
+      } else if (!a.returned && b.returned) {
+        return -1;
+      } else {
+        return a.end.compareTo(b.end);
+      }
+    });
+    return rentals;
   }
 
   @override
@@ -99,7 +112,7 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
                       });
                       getUserRentals().then((value) {
                         setState(() {
-                          rentals = value;
+                          rentals = sortRentals(value);
                           loading = false;
                         });
                       });
@@ -111,7 +124,7 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
           setState(() {
             loading = true;
           });
-          rentals = await getUserRentals();
+          rentals = sortRentals(await getUserRentals());
           setState(() {
             loading = false;
           });
@@ -125,7 +138,7 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
             });
             getUserRentals().then((value) {
               setState(() {
-                rentals = value;
+                rentals = sortRentals(value);
                 loading = false;
               });
             });
