@@ -28,10 +28,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       int authState = await getAuthState();
       if (authState == -1) {
         Navigator.pushNamedAndRemoveUntil(
-            context, '/autherror', (Route<dynamic> route) => false);
+            context, '/autherror', (Route<dynamic> route) => false,);
       } else if (authState == 0) {
         Navigator.pushNamedAndRemoveUntil(
-            context, '/signin', (Route<dynamic> route) => false);
+            context, '/signin', (Route<dynamic> route) => false,);
       }
     });
     return Scaffold(
@@ -48,11 +48,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                        "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} - "),
+                        "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} - ",),
                     Container(
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey[300]!),
-                          borderRadius: BorderRadius.circular(8)),
+                          borderRadius: BorderRadius.circular(8),),
                       child: InkWell(
                         onTap: () {
                           showDatePicker(
@@ -60,7 +60,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   initialDate: endDate,
                                   firstDate: DateTime.now(),
                                   lastDate:
-                                      DateTime.now().add(Duration(days: 7)))
+                                      DateTime.now().add(Duration(days: 7)),)
                               .then((value) {
                             if (value != null) {
                               setState(() {
@@ -72,7 +72,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                              "${endDate.day}/${endDate.month}/${endDate.year}"),
+                              "${endDate.day}/${endDate.month}/${endDate.year}",),
                         ),
                       ),
                     ),
@@ -93,7 +93,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             builder: (context) => AiBarcodeScanner(
                                 controller: MobileScannerController(
                                     detectionSpeed:
-                                        DetectionSpeed.noDuplicates),
+                                        DetectionSpeed.noDuplicates,),
                                 canPop: false,
                                 appBar:
                                     AppBar(title: const Text("Scan Equipment")),
@@ -112,17 +112,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(const SnackBar(
                                                     content: Text(
-                                                        "Equipment not found")));
+                                                        "Equipment not found",),),);
                                             loading = false;
                                           } else {
                                             if (equipment
                                                 .where((element) =>
-                                                    element.id == value.id)
+                                                    element.id == value.id,)
                                                 .isNotEmpty) {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(const SnackBar(
                                                       content: Text(
-                                                          "Equipment already added")));
+                                                          "Equipment already added",),),);
                                             } else {
                                               equipment.add(value);
                                             }
@@ -134,13 +134,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
                                               content: Text(
-                                                  "Invalid code scanned")));
+                                                  "Invalid code scanned",),),);
                                     }
                                   }
-                                }),
+                                },),
                           ),
                         );
-                      })),
+                      },),),
               // all equipment
               ...equipment.map((e) => ListTile(
                     title: Text(e.name),
@@ -153,7 +153,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         });
                       },
                     ),
-                  )),
+                  ),),
               Divider(),
               ListTile(
                 titleAlignment: ListTileTitleAlignment.center,
@@ -162,14 +162,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   onPressed: () async {
                     if (equipment.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text("Please add some equipment")));
+                          content: Text("Please add some equipment"),),);
                       return;
                     }
                     setState(() {
                       loading = true;
                     });
                     await startRental(DateTime.now(), endDate, equipment,
-                        await getUser(globals.supabase.auth.currentUser!.id));
+                        await getUser(globals.supabase.auth.currentUser!.id),);
 
                     setState(() {
                       loading = false;
@@ -177,9 +177,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     });
                   },
                 ),
-              )
+              ),
             ],
           ),
-        ));
+        ),);
   }
 }

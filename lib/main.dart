@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Yearbook Checkout',
       initialRoute: '/signin',
       routes: routes,
-      darkTheme: ThemeData.dark(),
+      darkTheme: ThemeData.dark(useMaterial3: true),
       debugShowCheckedModeBanner: false,
     );
   }

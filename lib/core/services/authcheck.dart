@@ -42,5 +42,5 @@ Future<int> getAuthState() async {
     return -1;
   }
 
-  return userData['admin'] ? 2 : 1;
+  return userData['admin'] as bool ? 2 : 1;
 }

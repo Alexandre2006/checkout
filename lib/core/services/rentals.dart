@@ -22,13 +22,13 @@ Future<List<CheckoutRental>> getUserRentals() async {
 
   final rentals = Future.wait((response as List<dynamic>).map((e) async {
     return CheckoutRental(
-      uuid: e['id'],
-      start: DateTime.parse(e['start']),
-      end: DateTime.parse(e['end']),
+      uuid: e['id'] as String,
+      start: DateTime.parse(e['start'] as String),
+      end: DateTime.parse(e['end'] as String),
       equipment: await Future.wait(
-          (e['equipment'] as List<dynamic>).map((e) => getEquipment(e))),
+          (e['equipment'] as List<dynamic>).map((e) => getEquipment(e as int))),
       renter: user,
-      returned: e['returned'],
+      returned: e['returned'] as bool,
     );
   }).toList());
 
@@ -48,13 +48,13 @@ Future<List<CheckoutRental>> getAllRentals() async {
 
   final rentals = Future.wait((response as List<dynamic>)
       .map((e) async => CheckoutRental(
-            uuid: e['uuid'],
-            start: DateTime.parse(e['start']),
-            end: DateTime.parse(e['end']),
+            uuid: e['uuid'] as String,
+            start: DateTime.parse(e['start'] as String),
+            end: DateTime.parse(e['end'] as String),
             equipment: await Future.wait((e['equipment'] as List<dynamic>)
-                .map((e) => getEquipment(e['id']))),
-            renter: await getUser(e['renter']),
-            returned: e['returned'],
+                .map((e) => getEquipment(e['id'] as int))),
+            renter: await getUser(e['renter'] as String),
+            returned: e['returned'] as bool,
           ))
       .toList());
 

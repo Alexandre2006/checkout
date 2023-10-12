@@ -6,7 +6,7 @@ class CheckoutListTile extends StatelessWidget {
   final CheckoutRental rental;
   final Function rebuildCallback;
   const CheckoutListTile(
-      {super.key, required this.rental, required this.rebuildCallback});
+      {super.key, required this.rental, required this.rebuildCallback,});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class CheckoutListTile extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
           return RentalPage(rental: rental);
-        })).then((value) => rebuildCallback());
+        },),).then((value) => rebuildCallback());
       },
       leading: Container(
         clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -23,8 +23,8 @@ class CheckoutListTile extends StatelessWidget {
       ),
       title: Text(rental.renter.name),
       subtitle: Text(
-          "Equipment: ${rental.equipment.map((e) => e.id)}\n${rental.start.day}/${rental.start.month}/${rental.start.year} - ${rental.end.day}/${rental.end.month}/${rental.end.year}"),
-      trailing: Container(
+          "Equipment: ${rental.equipment.map((e) => e.id)}\n${rental.start.day}/${rental.start.month}/${rental.start.year} - ${rental.end.day}/${rental.end.month}/${rental.end.year}",),
+      trailing: ColoredBox(
         color: rental.returned
             ? Colors.grey
             : rental.end.isBefore(DateTime.now())

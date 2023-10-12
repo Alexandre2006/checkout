@@ -13,8 +13,8 @@ Future<CheckoutEquipment> getEquipment(int id) async {
     );
   }
   return CheckoutEquipment(
-    id: response['id'],
-    name: response['name'],
+    id: response['id'] as int,
+    name: response['name'] as String,
   );
 }
 
@@ -28,8 +28,8 @@ Future<List<CheckoutEquipment>> getAllEquipment() async {
 
   final users = (response as List<dynamic>)
       .map((e) => CheckoutEquipment(
-            id: e['id'],
-            name: e['name'],
+            id: e['id'] as int,
+            name: e['name'] as String,
           ))
       .toList();
 

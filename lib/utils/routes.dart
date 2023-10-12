@@ -8,5 +8,5 @@ final routes = <String, WidgetBuilder>{
   '/': (context) => const HomeScreen(),
   '/signin': (context) => const SignInPage(),
   '/autherror': (context) => const AuthErrorPage(),
-  '/checkout': (context) => CheckoutScreen(),
+  '/checkout': (context) => const CheckoutScreen(),
 };

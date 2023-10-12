@@ -13,82 +13,89 @@ class RentalPage extends StatefulWidget {
 class _RentalPageState extends State<RentalPage> {
   @override
   Widget build(BuildContext context) {
-    CheckoutRental rental = widget.rental;
+    final CheckoutRental rental = widget.rental;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            "${rental.start.day}/${rental.start.month}/${rental.start.year} - ${rental.end.day}/${rental.end.month}/${rental.end.year}"),
+          "${rental.start.day}/${rental.start.month}/${rental.start.year} - ${rental.end.day}/${rental.end.month}/${rental.end.year}",
+        ),
       ),
-      body: ListView(children: [
-        ListTile(
-          leading: Container(
-            child: Image.network(rental.renter.profilePicture),
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            decoration: BoxDecoration(shape: BoxShape.circle),
+      body: ListView(
+        children: [
+          ListTile(
+            leading: Container(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              decoration: const BoxDecoration(shape: BoxShape.circle),
+              child: Image.network(rental.renter.profilePicture),
+            ),
+            title: Text("Borrower: ${rental.renter.name}"),
+            subtitle: Text(rental.renter.email),
           ),
-          title: Text("Borrower: ${rental.renter.name}"),
-          subtitle: Text("${rental.renter.email}"),
-        ),
-        Divider(),
-        ListTile(
-          title: Text("Start Date:"),
-          subtitle: Text(
-              "${rental.start.day}/${rental.start.month}/${rental.start.year}"),
-        ),
-        ListTile(
-          title: Text("End Date:"),
-          subtitle:
-              Text("${rental.end.day}/${rental.end.month}/${rental.end.year}"),
-          trailing: !rental.returned
-              ? IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () async {
-                    rental.end = await showDatePicker(
+          const Divider(),
+          ListTile(
+            title: const Text("Start Date:"),
+            subtitle: Text(
+              "${rental.start.day}/${rental.start.month}/${rental.start.year}",
+            ),
+          ),
+          ListTile(
+            title: const Text("End Date:"),
+            subtitle: Text(
+                "${rental.end.day}/${rental.end.month}/${rental.end.year}",),
+            trailing: !rental.returned
+                ? IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () async {
+                      rental.end = await showDatePicker(
                             context: context,
                             initialDate: rental.end,
                             firstDate: DateTime.now(),
-                            lastDate: DateTime.now().add(Duration(days: 7))) ??
-                        rental.end;
-                    setState(() {
-                      updateRental(rental);
-                    });
-                  },
-                )
-              : null,
-        ),
-        Divider(),
-        ListTile(
-          title: Text(
-            "Equipment:",
-            style: TextStyle(fontSize: 18),
+                            lastDate: DateTime.now().add(const Duration(days: 7)),
+                          ) ??
+                          rental.end;
+                      setState(() {
+                        updateRental(rental);
+                      });
+                    },
+                  )
+                : null,
           ),
-          subtitle: Column(
-            children: rental.equipment
-                .map((e) => ListTile(
-                      title: Text("${e.name}"),
+          const Divider(),
+          ListTile(
+            title: const Text(
+              "Equipment:",
+              style: TextStyle(fontSize: 18),
+            ),
+            subtitle: Column(
+              children: rental.equipment
+                  .map(
+                    (e) => ListTile(
+                      title: Text(e.name),
                       subtitle: Text("#${e.id}"),
-                    ))
-                .toList(),
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
-        ),
-        Divider(),
-        ListTile(
-          titleAlignment: ListTileTitleAlignment.center,
-          title: ElevatedButton(
-            child:
-                Text(rental.returned ? "Already Returned" : "Mark as Returned"),
-            onPressed: rental.returned
-                ? null
-                : () {
-                    rental.returned = true;
-                    setState(() {
-                      updateRental(rental);
-                    });
-                  },
+          const Divider(),
+          ListTile(
+            titleAlignment: ListTileTitleAlignment.center,
+            title: ElevatedButton(
+              onPressed: rental.returned
+                  ? null
+                  : () {
+                      rental.returned = true;
+                      setState(() {
+                        updateRental(rental);
+                      });
+                    },
+              child: Text(
+                  rental.returned ? "Already Returned" : "Mark as Returned",),
+            ),
           ),
-        )
-      ]),
+        ],
+      ),
     );
   }
 }

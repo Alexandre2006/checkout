@@ -16,10 +16,10 @@ Future<CheckoutUser> getUser(String id) async {
   }
 
   return CheckoutUser(
-      uuid: response['id'],
-      name: response['name'],
-      email: response['email'],
-      profilePicture: response['profile_picture']);
+      uuid: response['id'] as String,
+      name: response['name'] as String,
+      email: response['email'] as String,
+      profilePicture: response['profile_picture'] as String);
 }
 
 Future<List<CheckoutUser>> getAllUsers() async {
@@ -32,10 +32,10 @@ Future<List<CheckoutUser>> getAllUsers() async {
 
   final users = (response as List<dynamic>)
       .map((e) => CheckoutUser(
-          uuid: e['id'],
-          name: e['name'],
-          email: e['email'],
-          profilePicture: e['profile_picture']))
+          uuid: e['id'] as String,
+          name: e['name'] as String,
+          email: e['email'] as String,
+          profilePicture: e['profile_picture'] as String))
       .toList();
 
   return users;

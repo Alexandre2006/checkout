@@ -1,7 +1,10 @@
 import 'package:checkout/core/models/rental.dart';
+import 'package:checkout/core/models/user.dart';
 import 'package:checkout/core/services/authcheck.dart';
 import 'package:checkout/core/services/rentals.dart';
+import 'package:checkout/core/services/users.dart';
 import 'package:checkout/ui/shared/widgets/checkout.dart';
+import 'package:checkout/ui/shared/widgets/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -83,20 +86,7 @@ class _EquipmentScreenState extends State<EquipmentScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Yearbook Checkout"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () async {
-              setState(() {
-                loading = true;
-              });
-              rentals = await getUserRentals();
-              setState(() {
-                loading = false;
-              });
-            },
-          )
-        ],
+        actions: [UserButton()],
       ),
       body: RefreshIndicator(
         child: ListView(
