@@ -18,7 +18,9 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const DefaultAppBar(pageTitle: "Dashboard"),
-      body: index == 0 ? const CheckoutsView() : const Text("Reports"),
+      body: index == 0
+          ? const CheckoutsView()
+          : const Center(child: Text("Reports: Coming soon!")),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: index,
         onTap: (value) => setState(() => index = value),
