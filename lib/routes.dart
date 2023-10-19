@@ -1,7 +1,7 @@
 import 'package:checkout/pages/dashboard.dart';
-import 'package:checkout/pages/invalid_email_page.dart';
+import 'package:checkout/pages/errors/invalid_email_page.dart';
+import 'package:checkout/pages/errors/not_admin_page.dart';
 import 'package:checkout/pages/new_checkout.dart';
-import 'package:checkout/pages/not_admin_page.dart';
 import 'package:checkout/pages/login_page.dart';
 import 'package:checkout/pages/settings_page.dart';
 import 'package:flutter/material.dart';
