@@ -10,7 +10,7 @@ Future<String?> getAuthRedirect(bool requireAuth, bool requireAdmin) async {
   }
 
   if (requireAuth && !signedIn) {
-    return "/notauthed";
+    return "/login";
   } else if (requireAuth && !email.endsWith("@menloschool.org")) {
     return "/invalidemail";
   } else if (requireAdmin) {

@@ -49,7 +49,8 @@ class _AppBarAuthState extends State<AppBarAuth> {
               child: CircleAvatar(
                 radius: 24,
                 foregroundImage: NetworkImage(
-                    "${globals.supabase.auth.currentUser?.userMetadata?['avatar_url']}",),
+                  "${globals.supabase.auth.currentUser?.userMetadata?['avatar_url']}",
+                ),
               ),
             ),
             if (MediaQuery.of(context).size.width > 520)

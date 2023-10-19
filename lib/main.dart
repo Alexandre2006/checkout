@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Yearbook Checkout',
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: routes,
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData.dark(useMaterial3: true),

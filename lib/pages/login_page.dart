@@ -1,11 +1,16 @@
+import 'package:checkout/globals.dart' as globals;
+import 'package:checkout/services/auth/get_redirect.dart';
+import 'package:checkout/shared/appbar/appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class NotAuthedPage extends StatelessWidget {
-  const NotAuthedPage({super.key});
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const DefaultAppBar(pageTitle: "Yearbook Checkout"),
       body: Center(
         child: Card(
           child: Padding(
@@ -15,11 +20,11 @@ class NotAuthedPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  "You're not signed in!",
+                  "Please sign in to continue",
                   style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                 ),
                 const Text(
-                  "You must be signed in to view this page ¯\\_(ツ)_/¯",
+                  "You must be signed in with your @menloschool.org email",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
                 ),
                 const SizedBox(
@@ -27,11 +32,13 @@ class NotAuthedPage extends StatelessWidget {
                 ),
                 FilledButton.icon(
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, '/', (route) => false,);
+                    globals.supabase.auth.signInWithOAuth(
+                      Provider.google,
+                      redirectTo: getRedirectURI(),
+                    );
                   },
-                  icon: const Icon(Icons.arrow_back),
-                  label: const Text("Go Back"),
+                  icon: const Icon(Icons.login),
+                  label: const Text("Sign In"),
                 ),
               ],
             ),
