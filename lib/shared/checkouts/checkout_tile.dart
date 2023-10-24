@@ -24,7 +24,7 @@ class CheckoutTile extends StatelessWidget {
           children: [
             Text(checkout.user.name),
             Text(
-              "${checkout.start.day}/${checkout.start.month}/${checkout.start.year} - ${checkout.end.day}/${checkout.end.month}/${checkout.end.year}",
+              "${checkout.start.month}/${checkout.start.day}/${checkout.start.year} - ${checkout.end.month}/${checkout.end.day}/${checkout.end.year}",
             ),
             Text(
               "Equipment IDs: ${checkout.equipment.map((e) => e.id.toString()).join(", ")}",

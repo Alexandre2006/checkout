@@ -70,7 +70,7 @@ class _NewCheckoutPageState extends State<NewCheckoutPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}",
+                "${DateTime.now().month}/${DateTime.now().day}/${DateTime.now().year}",
               ),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8),
@@ -96,7 +96,7 @@ class _NewCheckoutPageState extends State<NewCheckoutPage> {
                   });
                 },
                 child: Text(
-                  "${endDate.day}/${endDate.month}/${endDate.year}",
+                  "${endDate.month}/${endDate.day}/${endDate.year}",
                 ),
               ),
             ],

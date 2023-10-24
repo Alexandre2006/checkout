@@ -90,7 +90,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "${editableCheckout.start.day}/${editableCheckout.start.month}/${editableCheckout.start.year}",
+                      "${editableCheckout.start.month}/${editableCheckout.start.day}/${editableCheckout.start.year}",
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8),
@@ -136,7 +136,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                             }
                           : null,
                       child: Text(
-                        "${editableCheckout.end.day}/${editableCheckout.end.month}/${editableCheckout.end.year}",
+                        "${editableCheckout.end.month}/${editableCheckout.end.day}/${editableCheckout.end.year}",
                       ),
                     ),
                   ],

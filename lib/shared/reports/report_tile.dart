@@ -27,7 +27,7 @@ class ReportTile extends StatelessWidget {
               report.title,
             ),
             Text(
-              "Created on: ${report.createdAt.day}/${report.createdAt.month}/${report.createdAt.year}",
+              "Created on: ${report.createdAt.month}/${report.createdAt.day}/${report.createdAt.year}",
             ),
           ],
         ),
