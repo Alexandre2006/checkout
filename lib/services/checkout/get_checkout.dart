@@ -28,7 +28,7 @@ Future<CheckoutCheckout> getCheckout(String uuid) async {
 }
 
 Future<List<CheckoutCheckout>> getUserCheckouts(
-    {String? uuid, int page = 0}) async {
+    {String? uuid, int pagesize = 10, int page = 0}) async {
   uuid ??= globals.supabase.auth.currentUser?.id;
 
   if (uuid == null) {
@@ -40,7 +40,7 @@ Future<List<CheckoutCheckout>> getUserCheckouts(
         .from('checkouts')
         .select()
         .eq('user', uuid)
-        .range(page * 10, (page + 1) * 10) as List<dynamic>;
+        .range(page * pagesize, (page + 1) * pagesize) as List<dynamic>;
 
     final data = response.map((e) => e as Map<String, dynamic>).toList();
     final List<CheckoutCheckout> checkouts = [];

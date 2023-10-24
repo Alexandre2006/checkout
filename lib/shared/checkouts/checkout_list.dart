@@ -1,29 +1,84 @@
+import 'dart:async';
+
 import 'package:checkout/models/checkout.dart';
+import 'package:checkout/services/checkout/get_checkout.dart';
 import 'package:checkout/shared/checkouts/checkout_tile.dart';
 import 'package:checkout/shared/checkouts/checkout_view.dart';
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class CheckoutList extends StatelessWidget {
-  final List<CheckoutCheckout> checkouts;
-  final Function()? onEdit;
-  const CheckoutList({super.key, required this.checkouts, this.onEdit});
+class CheckoutList extends StatefulWidget {
+  const CheckoutList({super.key});
+
+  @override
+  State<CheckoutList> createState() => _CheckoutListState();
+}
+
+class _CheckoutListState extends State<CheckoutList> {
+  static const _pageSize = 10;
+  bool loading = false;
+
+  final PagingController<int, CheckoutCheckout> _pagingController =
+      PagingController(firstPageKey: 0);
+
+  @override
+  void initState() {
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+
+    super.initState();
+  }
+
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      final newItems =
+          await getUserCheckouts(pagesize: _pageSize, page: pageKey);
+
+      final isLastPage = newItems.length < _pageSize;
+      if (isLastPage) {
+        _pagingController.appendLastPage(newItems);
+      } else {
+        final nextPageKey = pageKey + newItems.length;
+        _pagingController.appendPage(newItems, nextPageKey);
+      }
+    } catch (error) {
+      _pagingController.error = error;
+    }
+  }
+
+  Future<void> _refreshCheckouts() async {
+    loading = true;
+    _pagingController.refresh();
+    loading = false;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return checkouts.isEmpty
-        ? const Center(
-            child: Text("No checkouts found"),
-          )
-        : ListView(
-            children: ListTile.divideTiles(
-              tiles: [
-                for (final checkout in checkouts)
-                  InkWell(
+    return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, "/newcheckout")
+              .then((value) => _refreshCheckouts());
+        },
+        label: const Row(children: [Icon(Icons.add), Text("Checkout")]),
+      ),
+      body: RefreshIndicator(
+        triggerMode: RefreshIndicatorTriggerMode.anywhere,
+        onRefresh: () => _refreshCheckouts(),
+        child: loading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : PagedListView<int, CheckoutCheckout>(
+                pagingController: _pagingController,
+                builderDelegate: PagedChildBuilderDelegate<CheckoutCheckout>(
+                  itemBuilder: (context, checkout, index) => InkWell(
                     onTap: () => showModalBottomSheet(
                       isScrollControlled: true,
                       context: context,
                       builder: (context) => CheckoutView(checkout: checkout),
-                    ).then((value) => onEdit?.call()),
+                    ).then((value) => _refreshCheckouts()),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: 2,
@@ -32,9 +87,9 @@ class CheckoutList extends StatelessWidget {
                       child: CheckoutTile(checkout: checkout),
                     ),
                   ),
-              ],
-              context: context,
-            ).toList(),
-          );
+                ),
+              ),
+      ),
+    );
   }
 }
