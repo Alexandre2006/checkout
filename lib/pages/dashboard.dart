@@ -1,5 +1,3 @@
-import 'package:checkout/models/report.dart';
-import 'package:checkout/services/reports/get_report.dart';
 import 'package:checkout/services/routing/auth_redirect.dart';
 import 'package:checkout/shared/appbar/appbar.dart';
 import 'package:checkout/shared/checkouts/checkout_list.dart';

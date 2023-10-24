@@ -70,6 +70,15 @@ class _ReportListState extends State<ReportList> {
             : PagedListView<int, CheckoutReport>(
                 pagingController: _pagingController,
                 builderDelegate: PagedChildBuilderDelegate<CheckoutReport>(
+                  noItemsFoundIndicatorBuilder: (context) => const Center(
+                    child: Text("No reports found."),
+                  ),
+                  firstPageErrorIndicatorBuilder: (context) => const Center(
+                    child: Text("Error loading reports."),
+                  ),
+                  newPageErrorIndicatorBuilder: (context) => const Center(
+                    child: Text("Error loading reports."),
+                  ),
                   itemBuilder: (context, report, index) => InkWell(
                     onTap: () => showModalBottomSheet(
                       isScrollControlled: true,

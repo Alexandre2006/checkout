@@ -73,6 +73,15 @@ class _CheckoutListState extends State<CheckoutList> {
             : PagedListView<int, CheckoutCheckout>(
                 pagingController: _pagingController,
                 builderDelegate: PagedChildBuilderDelegate<CheckoutCheckout>(
+                  noItemsFoundIndicatorBuilder: (context) => const Center(
+                    child: Text("No checkouts found."),
+                  ),
+                  firstPageErrorIndicatorBuilder: (context) => const Center(
+                    child: Text("Error loading checkouts."),
+                  ),
+                  newPageErrorIndicatorBuilder: (context) => const Center(
+                    child: Text("Error loading checkouts."),
+                  ),
                   itemBuilder: (context, checkout, index) => InkWell(
                     onTap: () => showModalBottomSheet(
                       isScrollControlled: true,
