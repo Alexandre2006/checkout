@@ -36,11 +36,14 @@ Future<List<CheckoutCheckout>> getUserCheckouts(
   }
 
   try {
-    final response = await globals.supabase
-        .from('checkouts')
-        .select()
-        .eq('user', uuid)
-        .range(page * pagesize, (page + 1) * pagesize) as List<dynamic>;
+    final response = await globals.supabase.rpc(
+      'get_user_checkouts',
+      params: {
+        'user_id': uuid,
+        'pagesize': pagesize,
+        'page': page,
+      },
+    ) as List<dynamic>;
 
     final data = response.map((e) => e as Map<String, dynamic>).toList();
     final List<CheckoutCheckout> checkouts = [];
