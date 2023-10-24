@@ -1,4 +1,5 @@
 import 'package:checkout/models/checkout.dart';
+import 'package:checkout/pages/new_report.dart';
 import 'package:checkout/services/checkout/update_checkout.dart';
 import 'package:checkout/shared/equipment/equipment_tile.dart';
 import 'package:flutter/material.dart';
@@ -148,30 +149,49 @@ class _CheckoutViewState extends State<CheckoutView> {
                 for (final equipment in editableCheckout.equipment)
                   EquipmentTile(equipment: equipment),
                 const Divider(),
-                OutlinedButton(
-                  onPressed: editableCheckout.returned
-                      ? null
-                      : () {
-                          setState(() {
-                            editableCheckout.returned = true;
-                            updateCheckout(editableCheckout).onError(
-                              (error, stackTrace) =>
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    error.toString(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: OutlinedButton(
+                    onPressed: editableCheckout.returned
+                        ? null
+                        : () {
+                            setState(() {
+                              editableCheckout.returned = true;
+                              updateCheckout(editableCheckout).onError(
+                                (error, stackTrace) =>
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      error.toString(),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          });
-                        },
-                  child: Text(
-                    editableCheckout.returned
-                        ? "Already Returned"
-                        : " Mark Returned",
+                              );
+                            });
+                          },
+                    child: Text(
+                      editableCheckout.returned
+                          ? "Already Returned"
+                          : " Mark Returned",
+                    ),
                   ),
                 ),
+                const Padding(padding: EdgeInsets.symmetric(vertical: 4)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => NewReportPage(
+                            equipment: editableCheckout.equipment,
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text("Report an Issue"),
+                  ),
+                )
               ],
             ),
           ],
