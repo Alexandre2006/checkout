@@ -2,6 +2,7 @@ import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 import 'package:checkout/models/equipment.dart';
 import 'package:checkout/models/report.dart';
 import 'package:checkout/services/equipment/get_equipment.dart';
+import 'package:checkout/services/qr/parse_qr.dart';
 import 'package:checkout/services/reports/new_report.dart';
 import 'package:checkout/services/routing/auth_redirect.dart';
 import 'package:checkout/shared/appbar/appbar.dart';
@@ -187,7 +188,7 @@ class _NewCheckoutPageState extends State<NewReportPage> {
                                 loading = true;
                               });
 
-                              final int id = int.parse(value);
+                              final int id = parseQRCode(value);
 
                               getEquipment(id).then((value) {
                                 if (equipment
