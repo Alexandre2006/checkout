@@ -1,8 +1,11 @@
 import 'package:checkout/models/checkout.dart';
+import 'package:checkout/models/report.dart';
 import 'package:checkout/services/checkout/get_checkout.dart';
+import 'package:checkout/services/reports/get_report.dart';
 import 'package:checkout/services/routing/auth_redirect.dart';
 import 'package:checkout/shared/appbar/appbar.dart';
 import 'package:checkout/shared/checkouts/checkout_list.dart';
+import 'package:checkout/shared/reports/reports_list.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -15,12 +18,23 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   int index = 0;
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getAuthRedirect(true, false).then((value) {
+        if (value != null) {
+          Navigator.of(context).pushReplacementNamed(value);
+        }
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const DefaultAppBar(pageTitle: "Dashboard"),
-      body: index == 0
-          ? const CheckoutsView()
-          : const Center(child: Text("Reports: Coming soon!")),
+      body: index == 0 ? const CheckoutsView() : const ReportsView(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: index,
         onTap: (value) => setState(() => index = value),
@@ -55,14 +69,6 @@ class _CheckoutsViewState extends State<CheckoutsView> {
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      getAuthRedirect(true, false).then((value) {
-        if (value != null) {
-          Navigator.of(context).pushReplacementNamed(value);
-        }
-      });
-    });
 
     _refreshCheckouts();
   }
@@ -151,6 +157,92 @@ class _CheckoutsViewState extends State<CheckoutsView> {
             : CheckoutList(
                 checkouts: _sortCheckouts(checkouts),
                 onEdit: _refreshCheckouts,
+              ),
+      ),
+    );
+  }
+}
+
+class ReportsView extends StatefulWidget {
+  const ReportsView({super.key});
+
+  @override
+  State<ReportsView> createState() => _ReportsViewState();
+}
+
+class _ReportsViewState extends State<ReportsView> {
+  List<CheckoutReport> reports = [];
+  bool loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _refreshReports();
+  }
+
+  Future<void> _refreshReports() async {
+    setState(() {
+      loading = true;
+    });
+
+    getUserReports()
+        .then(
+      (value) => setState(
+        () {
+          reports = value;
+          loading = false;
+        },
+      ),
+    )
+        .onError(
+      (error, stackTrace) {
+        if (mounted) {
+          setState(
+            () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("Error getting reports: $error"),
+                  action: SnackBarAction(
+                    label: "Dismiss",
+                    onPressed: () =>
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+                  ),
+                ),
+              );
+              loading = false;
+            },
+          );
+        }
+      },
+    );
+  }
+
+  List<CheckoutReport> _sortReports(List<CheckoutReport> checkouts) {
+    // Sort by date
+    return checkouts..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, "/newreport")
+              .then((value) => _refreshReports());
+        },
+        label: const Row(children: [Icon(Icons.add), Text("Report")]),
+      ),
+      body: RefreshIndicator(
+        triggerMode: RefreshIndicatorTriggerMode.anywhere,
+        onRefresh: () => _refreshReports(),
+        child: loading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : ReportList(
+                reports: _sortReports(reports),
+                onEdit: _refreshReports,
               ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:checkout/pages/login_page.dart';
 import 'package:checkout/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -21,6 +22,8 @@ class MyApp extends StatelessWidget {
       title: 'Yearbook Checkout',
       initialRoute: '/login',
       routes: routes,
+      onUnknownRoute: (settings) =>
+          MaterialPageRoute(builder: (context) => LoginPage()),
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData.dark(useMaterial3: true),
       debugShowCheckedModeBanner: false,

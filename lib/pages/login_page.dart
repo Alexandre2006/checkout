@@ -1,5 +1,6 @@
 import 'package:checkout/globals.dart' as globals;
 import 'package:checkout/services/auth/get_redirect.dart';
+import 'package:checkout/services/routing/auth_redirect.dart';
 import 'package:checkout/shared/appbar/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -9,6 +10,17 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getAuthRedirect(true, false).then((value) {
+        if (value != "/login") {
+          if (value != null) {
+            Navigator.of(context).pushReplacementNamed(value);
+          } else {
+            Navigator.of(context).pushReplacementNamed("/dashboard");
+          }
+        }
+      });
+    });
     return Scaffold(
       appBar: const DefaultAppBar(pageTitle: "Yearbook Checkout"),
       body: Center(

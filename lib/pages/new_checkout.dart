@@ -2,6 +2,7 @@ import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 import 'package:checkout/models/equipment.dart';
 import 'package:checkout/services/checkout/new_checkout.dart';
 import 'package:checkout/services/equipment/get_equipment.dart';
+import 'package:checkout/services/routing/auth_redirect.dart';
 import 'package:checkout/shared/appbar/appbar.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +18,19 @@ class _NewCheckoutPageState extends State<NewCheckoutPage> {
   bool canScan = false;
   DateTime endDate = DateTime.now().add(const Duration(days: 1));
   List<CheckoutEquipment> equipment = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getAuthRedirect(true, false).then((value) {
+        if (value != null) {
+          Navigator.of(context).pushReplacementNamed(value);
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

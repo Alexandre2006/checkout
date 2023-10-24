@@ -8,6 +8,7 @@ class CheckoutReport {
   final String description;
   final CheckoutUser reporter;
   final List<CheckoutEquipment> equipment;
+  final ReportType type;
 
   CheckoutReport({
     required this.uuid,
@@ -16,5 +17,12 @@ class CheckoutReport {
     required this.description,
     required this.reporter,
     required this.equipment,
+    required this.type,
   });
+}
+
+enum ReportType {
+  damage,
+  bug,
+  feature,
 }

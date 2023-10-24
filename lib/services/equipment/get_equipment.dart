@@ -30,6 +30,6 @@ Future<List<CheckoutEquipment>> getAllEquipment() async {
         )
         .toList();
   } catch (error) {
-    throw Exception("Error getting equipment: $error");
+    throw Exception("$error");
   }
 }
