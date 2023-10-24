@@ -28,6 +28,7 @@ Future<CheckoutReport> getReport(String uuid) async {
 
 Future<List<CheckoutReport>> getUserReports({
   String? uuid,
+  int pagesize = 10,
   int page = 1,
 }) async {
   uuid ??= globals.supabase.auth.currentUser?.id;
@@ -41,7 +42,7 @@ Future<List<CheckoutReport>> getUserReports({
         .from('reports')
         .select()
         .eq('reporter', uuid)
-        .range(page * 10, (page + 1) * 10) as List<dynamic>;
+        .range(page * pagesize, (page + 1) * pagesize) as List<dynamic>;
 
     final data = response.map((e) => e as Map<String, dynamic>).toList();
     final List<CheckoutReport> reports = [];

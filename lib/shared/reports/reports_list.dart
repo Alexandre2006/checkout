@@ -1,29 +1,81 @@
 import 'package:checkout/models/report.dart';
+import 'package:checkout/services/reports/get_report.dart';
 import 'package:checkout/shared/reports/report_tile.dart';
 import 'package:checkout/shared/reports/report_view.dart';
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class ReportList extends StatelessWidget {
-  final List<CheckoutReport> reports;
-  final Function()? onEdit;
-  const ReportList({super.key, required this.reports, this.onEdit});
+class ReportList extends StatefulWidget {
+  const ReportList({super.key});
+
+  @override
+  State<ReportList> createState() => _ReportListState();
+}
+
+class _ReportListState extends State<ReportList> {
+  static const _pageSize = 10;
+  bool loading = false;
+
+  final PagingController<int, CheckoutReport> _pagingController =
+      PagingController(firstPageKey: 0);
+
+  @override
+  void initState() {
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+
+    super.initState();
+  }
+
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      final newItems = await getUserReports(pagesize: _pageSize, page: pageKey);
+
+      final isLastPage = newItems.length < _pageSize;
+      if (isLastPage) {
+        _pagingController.appendLastPage(newItems);
+      } else {
+        final nextPageKey = pageKey + newItems.length;
+        _pagingController.appendPage(newItems, nextPageKey);
+      }
+    } catch (error) {
+      _pagingController.error = error;
+    }
+  }
+
+  Future<void> _refreshReports() async {
+    loading = true;
+    _pagingController.refresh();
+    loading = false;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return reports.isEmpty
-        ? const Center(
-            child: Text("No reports found"),
-          )
-        : ListView(
-            children: ListTile.divideTiles(
-              tiles: [
-                for (final report in reports)
-                  InkWell(
+    return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, "/newreport")
+              .then((value) => _refreshReports());
+        },
+        label: const Row(children: [Icon(Icons.add), Text("Report")]),
+      ),
+      body: RefreshIndicator(
+        triggerMode: RefreshIndicatorTriggerMode.anywhere,
+        onRefresh: () => _refreshReports(),
+        child: loading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : PagedListView<int, CheckoutReport>(
+                pagingController: _pagingController,
+                builderDelegate: PagedChildBuilderDelegate<CheckoutReport>(
+                  itemBuilder: (context, report, index) => InkWell(
                     onTap: () => showModalBottomSheet(
                       isScrollControlled: true,
                       context: context,
                       builder: (context) => ReportView(report: report),
-                    ).then((value) => onEdit?.call()),
+                    ).then((value) => _refreshReports()),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: 2,
@@ -32,9 +84,9 @@ class ReportList extends StatelessWidget {
                       child: ReportTile(report: report),
                     ),
                   ),
-              ],
-              context: context,
-            ).toList(),
-          );
+                ),
+              ),
+      ),
+    );
   }
 }
