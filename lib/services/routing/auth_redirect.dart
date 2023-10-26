@@ -1,5 +1,6 @@
 import 'package:checkout/globals.dart' as globals;
 import 'package:checkout/services/user/get_user.dart';
+import 'package:checkout/services/user/register_user.dart';
 
 Future<String?> getAuthRedirect(bool requireAuth, bool requireAdmin) async {
   final bool signedIn = globals.supabase.auth.currentUser != null;
@@ -18,5 +19,6 @@ Future<String?> getAuthRedirect(bool requireAuth, bool requireAdmin) async {
       return "/notadmin";
     }
   }
+  registerUser();
   return null;
 }

@@ -8,7 +8,11 @@ Future<void> registerUser() async {
         .select()
         .eq('uuid', globals.supabase.auth.currentUser!.id);
     if (response != null) {
-      return;
+      globals.supabase.from('users').update({
+        'uuid': globals.supabase.auth.currentUser!.id,
+        'profile_picture':
+            globals.supabase.auth.currentUser!.userMetadata!['avatar_url'],
+      });
     }
   } catch (error) {
     throw Exception("Error checking if user exists: $error");
