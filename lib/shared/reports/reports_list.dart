@@ -114,7 +114,7 @@ class _ReportListState extends State<ReportList> {
                   firstPageErrorIndicatorBuilder: (context) {
                     // Popup error message (snackbar)
                     SnackBar snackBar = SnackBar(
-                      content: Text("Error loading reports."),
+                      content: Text("${_pagingController.error}}"),
                       action: SnackBarAction(
                         label: "Retry",
                         onPressed: () => _refreshReports(),
