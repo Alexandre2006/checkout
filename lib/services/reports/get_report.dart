@@ -38,18 +38,13 @@ Future<List<CheckoutReport>> getUserReports({
   }
 
   try {
-    throw Exception(await globals.supabase
-        .from('reports')
-        .select()
-        .eq('reporter', uuid)
-        .range(page * pagesize, (page + 1) * pagesize));
     final response = await globals.supabase
         .from('reports')
         .select()
         .eq('reporter', uuid)
         .range(page * pagesize, (page + 1) * pagesize) as List<dynamic>;
 
-    final data = response.map((e) => e as Map<String, dynamic>).toList();
+    final data = response.map((e) => e as Map<dynamic, dynamic>).toList();
     final List<CheckoutReport> reports = [];
 
     for (final report in data) {
