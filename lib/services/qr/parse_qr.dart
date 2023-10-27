@@ -21,7 +21,3 @@ int parseQRCode(String value) {
     throw Exception("Failed to parse QR code");
   }
 }
-
-
-// TODO:
-// Fix navigation on subpages (make sure you can always return when on newcheckout or newreport)
