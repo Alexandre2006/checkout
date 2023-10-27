@@ -44,7 +44,12 @@ Future<List<CheckoutReport>> getUserReports({
         .eq('reporter', uuid)
         .range(page * pagesize, (page + 1) * pagesize) as List<dynamic>;
 
-    final data = response.map((e) => e as Map<String, dynamic>).toList();
+    List<Map<String, dynamic>> data = [];
+    try {
+      data = response.map((e) => e as Map<String, dynamic>).toList();
+    } catch (e) {
+      throw Exception("$data");
+    }
     final List<CheckoutReport> reports = [];
 
     for (final report in data) {
@@ -82,12 +87,7 @@ Future<List<CheckoutReport>> getAllReports({
         .select()
         .range(page * pagesize, (page + 1) * pagesize) as List<dynamic>;
 
-    try {
-      final data = response.map((e) => e as Map<String, dynamic>).toList();
-    } catch (error) {
-      throw Exception("$response");
-    }
-    List<Map<String, dynamic>> data = [];
+    final data = response.map((e) => e as Map<String, dynamic>).toList();
     final List<CheckoutReport> reports = [];
 
     for (final report in data) {
