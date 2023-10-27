@@ -38,6 +38,11 @@ Future<List<CheckoutReport>> getUserReports({
   }
 
   try {
+    throw Exception(await globals.supabase
+        .from('reports')
+        .select()
+        .eq('reporter', uuid)
+        .range(page * pagesize, (page + 1) * pagesize));
     final response = await globals.supabase
         .from('reports')
         .select()
