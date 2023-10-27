@@ -1,5 +1,5 @@
 import 'package:checkout/models/checkout.dart';
-import 'package:checkout/pages/new_report.dart';
+import 'package:checkout/pages/dashboard/new_report.dart';
 import 'package:checkout/services/checkout/update_checkout.dart';
 import 'package:checkout/shared/equipment/equipment_tile.dart';
 import 'package:flutter/material.dart';

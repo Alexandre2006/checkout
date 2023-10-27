@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:checkout/models/checkout.dart';
-import 'package:checkout/pages/new_checkout.dart';
+import 'package:checkout/pages/dashboard/new_checkout.dart';
 import 'package:checkout/services/checkout/get_checkout.dart';
+import 'package:checkout/services/routing/auth_redirect.dart';
 import 'package:checkout/shared/checkouts/checkout_tile.dart';
 import 'package:checkout/shared/checkouts/checkout_view.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,8 @@ class CheckoutList extends StatefulWidget {
 class _CheckoutListState extends State<CheckoutList> {
   static const _pageSize = 10;
   bool loading = false;
+  bool adminMode = false;
+  bool isAdmin = false;
 
   final PagingController<int, CheckoutCheckout> _pagingController =
       PagingController(firstPageKey: 0);
@@ -28,6 +31,14 @@ class _CheckoutListState extends State<CheckoutList> {
       _fetchPage(pageKey);
     });
 
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      if (await getAuthRedirect(true, true) == null) {
+        setState(() {
+          isAdmin = true;
+        });
+      }
+    });
+
     super.initState();
   }
 
@@ -35,7 +46,9 @@ class _CheckoutListState extends State<CheckoutList> {
     try {
       final newItems =
           // ignore: avoid_redundant_argument_values
-          await getUserCheckouts(pagesize: _pageSize, page: pageKey);
+          adminMode
+              ? await getAllCheckouts(pagesize: _pageSize, page: pageKey)
+              : await getUserCheckouts(pagesize: _pageSize, page: pageKey);
 
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
@@ -50,19 +63,41 @@ class _CheckoutListState extends State<CheckoutList> {
   }
 
   Future<void> _refreshCheckouts() async {
-    loading = true;
+    setState(() {
+      loading = true;
+    });
     _pagingController.refresh();
-    loading = false;
+    setState(() {
+      loading = false;
+    });
+  }
+
+  Future<void> _toggleAdminMode() async {
+    adminMode = !adminMode;
+    _refreshCheckouts();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      persistentFooterButtons: isAdmin
+          ? [
+              Center(
+                child: TextButton(
+                  onPressed: () => _toggleAdminMode(),
+                  child: Text(adminMode
+                      ? "Switch to User Mode"
+                      : "Switch to Admin Mode"),
+                ),
+              ),
+            ]
+          : null,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const NewCheckoutPage()),)
-              .then((value) => _refreshCheckouts());
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const NewCheckoutPage()),
+          ).then((value) => _refreshCheckouts());
         },
         label: const Row(children: [Icon(Icons.add), Text("Checkout")]),
       ),

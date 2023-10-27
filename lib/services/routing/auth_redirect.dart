@@ -1,7 +1,7 @@
 import 'package:checkout/globals.dart' as globals;
 import 'package:checkout/pages/errors/invalid_email_page.dart';
 import 'package:checkout/pages/errors/not_admin_page.dart';
-import 'package:checkout/pages/login_page.dart';
+import 'package:checkout/pages/auth/login_page.dart';
 import 'package:checkout/services/user/get_user.dart';
 import 'package:checkout/services/user/register_user.dart';
 import 'package:flutter/material.dart';

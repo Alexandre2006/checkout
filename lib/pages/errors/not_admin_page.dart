@@ -1,6 +1,6 @@
 import 'package:checkout/globals.dart' as globals;
-import 'package:checkout/pages/dashboard.dart';
-import 'package:checkout/pages/login_page.dart';
+import 'package:checkout/pages/dashboard/dashboard.dart';
+import 'package:checkout/pages/auth/login_page.dart';
 import 'package:flutter/material.dart';
 
 class NotAdminPage extends StatelessWidget {

@@ -29,7 +29,7 @@ Future<CheckoutReport> getReport(String uuid) async {
 Future<List<CheckoutReport>> getUserReports({
   String? uuid,
   int pagesize = 10,
-  int page = 1,
+  int page = 0,
 }) async {
   uuid ??= globals.supabase.auth.currentUser?.id;
 
@@ -51,6 +51,44 @@ Future<List<CheckoutReport>> getUserReports({
       reports.add(
         CheckoutReport(
           uuid: uuid,
+          createdAt: DateTime.parse(report['created_at'] as String),
+          title: report['title'] as String,
+          description: report['description'] as String,
+          reporter: await getUser(report['reporter'] as String),
+          equipment: await Future.wait(
+            (report['equipment'] as List<dynamic>)
+                .map((e) => getEquipment(e as int)),
+          ),
+          type: ReportType.values.firstWhere(
+            (element) => element.name == report['type'] as String,
+          ),
+        ),
+      );
+    }
+
+    return reports;
+  } catch (error) {
+    throw Exception("$error");
+  }
+}
+
+Future<List<CheckoutReport>> getAllReports({
+  int pagesize = 10,
+  int page = 0,
+}) async {
+  try {
+    final response = await globals.supabase
+        .from('reports')
+        .select()
+        .range(page * pagesize, (page + 1) * pagesize) as List<dynamic>;
+
+    final data = response.map((e) => e as Map<String, dynamic>).toList();
+    final List<CheckoutReport> reports = [];
+
+    for (final report in data) {
+      reports.add(
+        CheckoutReport(
+          uuid: report['reporter'] as String,
           createdAt: DateTime.parse(report['created_at'] as String),
           title: report['title'] as String,
           description: report['description'] as String,

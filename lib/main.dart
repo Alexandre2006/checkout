@@ -1,4 +1,4 @@
-import 'package:checkout/pages/login_page.dart';
+import 'package:checkout/pages/auth/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

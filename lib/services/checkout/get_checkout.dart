@@ -27,8 +27,11 @@ Future<CheckoutCheckout> getCheckout(String uuid) async {
   }
 }
 
-Future<List<CheckoutCheckout>> getUserCheckouts(
-    {String? uuid, int pagesize = 10, int page = 0,}) async {
+Future<List<CheckoutCheckout>> getUserCheckouts({
+  String? uuid,
+  int pagesize = 10,
+  int page = 0,
+}) async {
   uuid ??= globals.supabase.auth.currentUser?.id;
 
   if (uuid == null) {
@@ -67,5 +70,50 @@ Future<List<CheckoutCheckout>> getUserCheckouts(
     return checkouts;
   } catch (error) {
     throw Exception("Error getting user checkouts: $error");
+  }
+}
+
+Future<List<CheckoutCheckout>> getAllCheckouts({
+  String? uuid,
+  int pagesize = 10,
+  int page = 0,
+}) async {
+  uuid ??= globals.supabase.auth.currentUser?.id;
+
+  if (uuid == null) {
+    throw Exception("User couldn't be found.");
+  }
+
+  try {
+    final response = await globals.supabase.rpc(
+      'get_all_checkouts',
+      params: {
+        'pagesize': pagesize,
+        'page': page,
+      },
+    ) as List<dynamic>;
+
+    final data = response.map((e) => e as Map<String, dynamic>).toList();
+    final List<CheckoutCheckout> checkouts = [];
+
+    for (final checkout in data) {
+      checkouts.add(
+        CheckoutCheckout(
+          uuid: checkout['id'] as String,
+          start: DateTime.parse(checkout['start'] as String),
+          end: DateTime.parse(checkout['end'] as String),
+          equipment: await Future.wait(
+            (checkout['equipment'] as List<dynamic>)
+                .map((e) => getEquipment(e as int)),
+          ),
+          user: await getUser(checkout['user'] as String),
+          returned: checkout['returned'] as bool,
+        ),
+      );
+    }
+
+    return checkouts;
+  } catch (error) {
+    throw Exception("Error getting all checkouts: $error");
   }
 }

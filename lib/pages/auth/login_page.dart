@@ -1,5 +1,5 @@
 import 'package:checkout/globals.dart' as globals;
-import 'package:checkout/pages/dashboard.dart';
+import 'package:checkout/pages/dashboard/dashboard.dart';
 import 'package:checkout/services/auth/get_redirect.dart';
 import 'package:checkout/services/routing/auth_redirect.dart';
 import 'package:checkout/shared/appbar/appbar.dart';

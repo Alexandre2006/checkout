@@ -1,6 +1,7 @@
 import 'package:checkout/models/report.dart';
-import 'package:checkout/pages/new_report.dart';
+import 'package:checkout/pages/dashboard/new_report.dart';
 import 'package:checkout/services/reports/get_report.dart';
+import 'package:checkout/services/routing/auth_redirect.dart';
 import 'package:checkout/shared/reports/report_tile.dart';
 import 'package:checkout/shared/reports/report_view.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ class ReportList extends StatefulWidget {
 class _ReportListState extends State<ReportList> {
   static const _pageSize = 10;
   bool loading = false;
+  bool adminMode = false;
+  bool isAdmin = false;
 
   final PagingController<int, CheckoutReport> _pagingController =
       PagingController(firstPageKey: 0);
@@ -26,13 +29,23 @@ class _ReportListState extends State<ReportList> {
       _fetchPage(pageKey);
     });
 
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      if (await getAuthRedirect(true, true) == null) {
+        setState(() {
+          isAdmin = true;
+        });
+      }
+    });
+
     super.initState();
   }
 
   Future<void> _fetchPage(int pageKey) async {
     try {
       // ignore: avoid_redundant_argument_values
-      final newItems = await getUserReports(pagesize: _pageSize, page: pageKey);
+      final newItems = adminMode
+          ? await getAllReports()
+          : await getUserReports(pagesize: _pageSize, page: pageKey);
 
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
@@ -47,19 +60,41 @@ class _ReportListState extends State<ReportList> {
   }
 
   Future<void> _refreshReports() async {
-    loading = true;
+    setState(() {
+      loading = true;
+    });
     _pagingController.refresh();
-    loading = false;
+    setState(() {
+      loading = false;
+    });
+  }
+
+  Future<void> _toggleAdminMode() async {
+    adminMode = !adminMode;
+    _refreshReports();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      persistentFooterButtons: isAdmin
+          ? [
+              Center(
+                child: TextButton(
+                  onPressed: () => _toggleAdminMode(),
+                  child: Text(
+                    adminMode ? "Switch to User Mode" : "Switch to Admin Mode",
+                  ),
+                ),
+              ),
+            ]
+          : null,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const NewReportPage()),)
-              .then((value) => _refreshReports());
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const NewReportPage()),
+          ).then((value) => _refreshReports());
         },
         label: const Row(children: [Icon(Icons.add), Text("Report")]),
       ),
