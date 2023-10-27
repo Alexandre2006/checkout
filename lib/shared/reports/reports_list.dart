@@ -111,9 +111,22 @@ class _ReportListState extends State<ReportList> {
                   noItemsFoundIndicatorBuilder: (context) => const Center(
                     child: Text("No reports found."),
                   ),
-                  firstPageErrorIndicatorBuilder: (context) => const Center(
-                    child: Text("Error loading reports."),
-                  ),
+                  firstPageErrorIndicatorBuilder: (context) {
+                    // Popup error message (snackbar)
+                    SnackBar snackBar = SnackBar(
+                      content: Text("Error loading reports."),
+                      action: SnackBarAction(
+                        label: "Retry",
+                        onPressed: () => _refreshReports(),
+                      ),
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                    return const Center(
+                      child: Text("Error loading reports."),
+                    );
+                  },
                   newPageErrorIndicatorBuilder: (context) => const Center(
                     child: Text("Error loading reports."),
                   ),

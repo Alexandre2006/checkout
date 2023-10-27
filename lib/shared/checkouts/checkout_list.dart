@@ -85,9 +85,9 @@ class _CheckoutListState extends State<CheckoutList> {
               Center(
                 child: TextButton(
                   onPressed: () => _toggleAdminMode(),
-                  child: Text(adminMode
-                      ? "Switch to User Mode"
-                      : "Switch to Admin Mode"),
+                  child: Text(
+                    adminMode ? "Switch to User Mode" : "Switch to Admin Mode",
+                  ),
                 ),
               ),
             ]
