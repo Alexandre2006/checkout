@@ -191,7 +191,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                     },
                     child: const Text("Report an Issue"),
                   ),
-                )
+                ),
               ],
             ),
           ],

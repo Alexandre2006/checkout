@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String pageTitle;
-  const DefaultAppBar({super.key, required this.pageTitle});
+  final bool showAuth;
+  const DefaultAppBar(
+      {super.key, required this.pageTitle, this.showAuth = true,});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: FittedBox(fit: BoxFit.scaleDown, child: Text(pageTitle)),
-      actions: const [AppBarAuth()],
+      actions: [if (showAuth) const AppBarAuth()],
       centerTitle: false,
     );
   }

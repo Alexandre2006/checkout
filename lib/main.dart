@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: routes,
       onUnknownRoute: (settings) =>
-          MaterialPageRoute(builder: (context) => LoginPage()),
+          MaterialPageRoute(builder: (context) => const LoginPage()),
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData.dark(useMaterial3: true),
       debugShowCheckedModeBanner: false,

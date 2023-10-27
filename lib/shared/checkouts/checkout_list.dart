@@ -33,6 +33,7 @@ class _CheckoutListState extends State<CheckoutList> {
   Future<void> _fetchPage(int pageKey) async {
     try {
       final newItems =
+          // ignore: avoid_redundant_argument_values
           await getUserCheckouts(pagesize: _pageSize, page: pageKey);
 
       final isLastPage = newItems.length < _pageSize;

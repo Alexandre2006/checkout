@@ -30,6 +30,7 @@ class _ReportListState extends State<ReportList> {
 
   Future<void> _fetchPage(int pageKey) async {
     try {
+      // ignore: avoid_redundant_argument_values
       final newItems = await getUserReports(pagesize: _pageSize, page: pageKey);
 
       final isLastPage = newItems.length < _pageSize;

@@ -2,7 +2,7 @@ import 'package:checkout/globals.dart' as globals;
 import 'package:checkout/models/equipment.dart';
 
 Future<void> createCheckout(
-    List<CheckoutEquipment> equipment, DateTime endDate) async {
+    List<CheckoutEquipment> equipment, DateTime endDate,) async {
   // loop 1000 times
   try {
     await globals.supabase.from('checkouts').insert({

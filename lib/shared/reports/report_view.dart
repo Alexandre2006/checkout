@@ -68,7 +68,7 @@ class ReportView extends StatelessWidget {
                 ),
                 const Divider(),
                 ListTile(
-                  title: Text("Type:"),
+                  title: const Text("Type:"),
                   subtitle: report.type == ReportType.damage
                       ? const Text("Equipment Damaged / Lost")
                       : report.type == ReportType.feature
@@ -76,11 +76,11 @@ class ReportView extends StatelessWidget {
                           : const Text("Bug / Issue"),
                 ),
                 ListTile(
-                  title: Text("Title:"),
+                  title: const Text("Title:"),
                   subtitle: Text(report.title),
                 ),
                 ListTile(
-                  title: Text("Description:"),
+                  title: const Text("Description:"),
                   subtitle: Text(report.description),
                 ),
                 if (report.equipment.isNotEmpty) const Divider(),

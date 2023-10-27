@@ -28,7 +28,7 @@ Future<CheckoutCheckout> getCheckout(String uuid) async {
 }
 
 Future<List<CheckoutCheckout>> getUserCheckouts(
-    {String? uuid, int pagesize = 10, int page = 0}) async {
+    {String? uuid, int pagesize = 10, int page = 0,}) async {
   uuid ??= globals.supabase.auth.currentUser?.id;
 
   if (uuid == null) {

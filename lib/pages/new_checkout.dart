@@ -1,10 +1,8 @@
-import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
 import 'package:checkout/models/equipment.dart';
 import 'package:checkout/services/checkout/new_checkout.dart';
-import 'package:checkout/services/equipment/get_equipment.dart';
-import 'package:checkout/services/qr/parse_qr.dart';
 import 'package:checkout/services/routing/auth_redirect.dart';
 import 'package:checkout/shared/appbar/appbar.dart';
+import 'package:checkout/shared/scanner/equipment_scanner.dart';
 import 'package:flutter/material.dart';
 
 class NewCheckoutPage extends StatefulWidget {
@@ -40,17 +38,18 @@ class _NewCheckoutPageState extends State<NewCheckoutPage> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           if (equipment.isNotEmpty) {
-            createCheckout(equipment, endDate)
-                .then((value) => Navigator.pop(context),
-                    onError: (error, stackTrace) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    error.toString(),
+            createCheckout(equipment, endDate).then(
+              (value) => Navigator.pop(context),
+              onError: (error, stackTrace) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      error.toString(),
+                    ),
                   ),
-                ),
-              );
-            });
+                );
+              },
+            );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -104,80 +103,28 @@ class _NewCheckoutPageState extends State<NewCheckoutPage> {
           ),
           const Divider(),
           ListTile(
-              title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text("Equipment:"),
-              OutlinedButton.icon(
-                icon: const Icon(Icons.add),
-                label: const Text("Add Equipment"),
-                onPressed: () {
-                  canScan = true;
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => AiBarcodeScanner(
-                        canPop: false,
-                        appBar: AppBar(
-                          title: const Text("Scan Equipment"),
-                        ),
-                        onScan: (value) {
-                          if (!canScan) {
-                            return;
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("Equipment:"),
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.add),
+                  label: const Text("Add Equipment"),
+                  onPressed: () {
+                    setState(() {
+                      scanEquipment(context, alreadyScanned: equipment).then(
+                        (value) => setState(() {
+                          if (value != null) {
+                            equipment.add(value);
                           }
-                          canScan = false;
-                          Navigator.of(context).pop();
-                          try {
-                            setState(() {
-                              loading = true;
-                            });
-
-                            final int id = parseQRCode(value);
-
-                            getEquipment(id).then((value) {
-                              if (equipment
-                                  .where((element) => element.id == id)
-                                  .isEmpty) {
-                                setState(() {
-                                  equipment.add(value);
-                                });
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      "Equipment already added",
-                                    ),
-                                  ),
-                                );
-                              }
-                            }).onError((error, stackTrace) {
-                              setState(() {
-                                loading = false;
-                              });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    error.toString(),
-                                  ),
-                                ),
-                              );
-                            });
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  "Failed to add equipment: $e",
-                                ),
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  );
-                },
-              )
-            ],
-          )),
+                        }),
+                      );
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
           if (equipment.isEmpty)
             const ListTile(
               title: Center(child: Text("No equipment added")),

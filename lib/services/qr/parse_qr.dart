@@ -25,4 +25,3 @@ int parseQRCode(String value) {
 
 // TODO:
 // Fix navigation on subpages (make sure you can always return when on newcheckout or newreport)
-// Fix QR Code white square
