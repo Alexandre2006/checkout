@@ -1,13 +1,14 @@
 import 'package:checkout/globals.dart' as globals;
 import 'package:checkout/models/report.dart';
 import 'package:checkout/services/equipment/get_equipment.dart';
+import 'package:checkout/services/supabase/single_fix.dart';
 import 'package:checkout/services/user/get_user.dart';
 
 Future<CheckoutReport> getReport(String uuid) async {
   try {
     final response =
         await globals.supabase.from('reports').select().eq('id', uuid).single();
-    final data = response as Map<String, dynamic>;
+    final data = fixSingle(response);
 
     return CheckoutReport(
       uuid: data['id'] as String,
@@ -44,12 +45,7 @@ Future<List<CheckoutReport>> getUserReports({
         .eq('reporter', uuid)
         .range(page * pagesize, (page + 1) * pagesize) as List<dynamic>;
 
-    List<Map<String, dynamic>> data = [];
-    try {
-      data = response.map((e) => e as Map<String, dynamic>).toList();
-    } catch (e) {
-      throw Exception("$data");
-    }
+    final data = response.map((e) => e as Map<String, dynamic>).toList();
     final List<CheckoutReport> reports = [];
 
     for (final report in data) {

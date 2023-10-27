@@ -1,14 +1,19 @@
 import 'package:checkout/globals.dart' as globals;
 import 'package:checkout/models/user.dart';
+import 'package:checkout/services/supabase/single_fix.dart';
 import 'package:checkout/services/user/register_user.dart';
 
 Future<CheckoutUser> getUser(String uuid) async {
-  final response =
-      await globals.supabase.from('users').select().eq('id', uuid).single();
+  final response = await globals.supabase
+      .from('users')
+      .select()
+      .eq('id', uuid)
+      .limit(1)
+      .single();
 
   try {
     // Parse response
-    final data = response as Map<String, dynamic>;
+    final data = fixSingle(response);
 
     return CheckoutUser(
       uuid: data['id'] as String,

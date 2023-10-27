@@ -1,6 +1,7 @@
 import 'package:checkout/globals.dart' as globals;
 import 'package:checkout/models/checkout.dart';
 import 'package:checkout/services/equipment/get_equipment.dart';
+import 'package:checkout/services/supabase/single_fix.dart';
 import 'package:checkout/services/user/get_user.dart';
 
 Future<CheckoutCheckout> getCheckout(String uuid) async {
@@ -10,7 +11,7 @@ Future<CheckoutCheckout> getCheckout(String uuid) async {
         .select()
         .eq('id', uuid)
         .single();
-    final data = response as Map<String, dynamic>;
+    final data = fixSingle(response);
 
     return CheckoutCheckout(
       uuid: data['id'] as String,

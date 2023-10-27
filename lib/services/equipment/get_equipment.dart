@@ -1,12 +1,13 @@
 import 'package:checkout/globals.dart' as globals;
 import 'package:checkout/models/equipment.dart';
+import 'package:checkout/services/supabase/single_fix.dart';
 
 Future<CheckoutEquipment> getEquipment(int id) async {
   try {
     final response =
         await globals.supabase.from('equipment').select().eq('id', id).single();
 
-    final data = response as Map<String, dynamic>;
+    final data = fixSingle(response);
 
     return CheckoutEquipment(
       id: data['id'] as int,

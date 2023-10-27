@@ -114,11 +114,21 @@ class _CheckoutListState extends State<CheckoutList> {
                   noItemsFoundIndicatorBuilder: (context) => const Center(
                     child: Text("No checkouts found."),
                   ),
-                  firstPageErrorIndicatorBuilder: (context) => const Center(
-                    child: Text("Error loading checkouts."),
+                  firstPageErrorIndicatorBuilder: (context) => Center(
+                    child: Column(
+                      children: [
+                        const Text("Error loading checkouts:"),
+                        Text(_pagingController.error.toString())
+                      ],
+                    ),
                   ),
-                  newPageErrorIndicatorBuilder: (context) => const Center(
-                    child: Text("Error loading checkouts."),
+                  newPageErrorIndicatorBuilder: (context) => Center(
+                    child: Column(
+                      children: [
+                        const Text("Error loading checkouts:"),
+                        Text(_pagingController.error.toString())
+                      ],
+                    ),
                   ),
                   itemBuilder: (context, checkout, index) => InkWell(
                     onTap: () => showModalBottomSheet(

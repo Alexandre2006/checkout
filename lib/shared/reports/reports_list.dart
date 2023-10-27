@@ -111,24 +111,21 @@ class _ReportListState extends State<ReportList> {
                   noItemsFoundIndicatorBuilder: (context) => const Center(
                     child: Text("No reports found."),
                   ),
-                  firstPageErrorIndicatorBuilder: (context) {
-                    // Popup error message (snackbar)
-                    SnackBar snackBar = SnackBar(
-                      content: Text("${_pagingController.error}}"),
-                      action: SnackBarAction(
-                        label: "Retry",
-                        onPressed: () => _refreshReports(),
-                      ),
-                    );
-
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                    return const Center(
-                      child: Text("Error loading reports."),
-                    );
-                  },
-                  newPageErrorIndicatorBuilder: (context) => const Center(
-                    child: Text("Error loading reports."),
+                  firstPageErrorIndicatorBuilder: (context) => Center(
+                    child: Column(
+                      children: [
+                        const Text("Error loading reports:"),
+                        Text(_pagingController.error.toString())
+                      ],
+                    ),
+                  ),
+                  newPageErrorIndicatorBuilder: (context) => Center(
+                    child: Column(
+                      children: [
+                        const Text("Error loading reports:"),
+                        Text(_pagingController.error.toString())
+                      ],
+                    ),
                   ),
                   itemBuilder: (context, report, index) => InkWell(
                     onTap: () => showModalBottomSheet(
