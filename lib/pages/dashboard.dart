@@ -20,7 +20,8 @@ class _DashboardPageState extends State<DashboardPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getAuthRedirect(true, false).then((value) {
         if (value != null) {
-          Navigator.of(context).pushReplacementNamed(value);
+          Navigator.of(context)
+              .pushReplacement(MaterialPageRoute(builder: (context) => value));
         }
       });
     });

@@ -32,7 +32,8 @@ class _NewCheckoutPageState extends State<NewReportPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getAuthRedirect(true, false).then((value) {
         if (value != null) {
-          Navigator.of(context).pushReplacementNamed(value);
+          Navigator.of(context)
+              .pushReplacement(MaterialPageRoute(builder: (context) => value));
         }
       });
     });
@@ -41,7 +42,10 @@ class _NewCheckoutPageState extends State<NewReportPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const DefaultAppBar(pageTitle: "New Report"),
+      appBar: const DefaultAppBar(
+        pageTitle: "New Report",
+        showAuth: false,
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           if (equipment.isEmpty && type == ReportType.damage) {
@@ -74,16 +78,18 @@ class _NewCheckoutPageState extends State<NewReportPage> {
               description,
               equipment,
               type,
-            ).then((value) => Navigator.pop(context),
-                onError: (error, stackTrace) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    error.toString(),
+            ).then(
+              (value) => Navigator.pop(context),
+              onError: (error, stackTrace) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      error.toString(),
+                    ),
                   ),
-                ),
-              );
-            },);
+                );
+              },
+            );
           }
         },
         label: const Row(children: [Text("Submit Report"), Icon(Icons.check)]),
@@ -159,24 +165,26 @@ class _NewCheckoutPageState extends State<NewReportPage> {
           if (type == ReportType.damage) const Divider(),
           if (type == ReportType.damage)
             ListTile(
-                title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text("Equipment:"),
-                OutlinedButton.icon(
-                  icon: const Icon(Icons.add),
-                  label: const Text("Add Equipment"),
-                  onPressed: () {
-                    scanEquipment(context, alreadyScanned: equipment)
-                        .then((value) => setState(() {
-                              if (value != null) {
-                                equipment.add(value);
-                              }
-                            }),);
-                  },
-                ),
-              ],
-            ),),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("Equipment:"),
+                  OutlinedButton.icon(
+                    icon: const Icon(Icons.add),
+                    label: const Text("Add Equipment"),
+                    onPressed: () {
+                      scanEquipment(context, alreadyScanned: equipment).then(
+                        (value) => setState(() {
+                          if (value != null) {
+                            equipment.add(value);
+                          }
+                        }),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
           if (equipment.isEmpty && type == ReportType.damage)
             const ListTile(
               title: Center(child: Text("No equipment added")),

@@ -1,4 +1,5 @@
 import 'package:checkout/globals.dart' as globals;
+import 'package:checkout/pages/login_page.dart';
 import 'package:checkout/services/routing/auth_redirect.dart';
 import 'package:checkout/shared/appbar/appbar.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,8 @@ class _SettingsPageState extends State<SettingsPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getAuthRedirect(true, false).then((value) {
         if (value != null) {
-          Navigator.of(context).pushReplacementNamed(value);
+          Navigator.of(context)
+              .pushReplacement(MaterialPageRoute(builder: (context) => value));
         }
       });
     });
@@ -27,7 +29,10 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const DefaultAppBar(pageTitle: "Preferences"),
+      appBar: const DefaultAppBar(
+        pageTitle: "Preferences",
+        showAuth: false,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
@@ -84,9 +89,9 @@ class _SettingsPageState extends State<SettingsPage> {
               child: const Text("Sign Out"),
               onPressed: () {
                 globals.supabase.auth.signOut();
-                Navigator.pushNamedAndRemoveUntil(
+                Navigator.pushAndRemoveUntil(
                   context,
-                  '/',
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
                   (route) => false,
                 );
               },

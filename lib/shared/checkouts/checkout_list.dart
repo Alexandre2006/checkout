@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:checkout/models/checkout.dart';
+import 'package:checkout/pages/new_checkout.dart';
 import 'package:checkout/services/checkout/get_checkout.dart';
 import 'package:checkout/shared/checkouts/checkout_tile.dart';
 import 'package:checkout/shared/checkouts/checkout_view.dart';
@@ -59,7 +60,8 @@ class _CheckoutListState extends State<CheckoutList> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.pushNamed(context, "/newcheckout")
+          Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const NewCheckoutPage()),)
               .then((value) => _refreshCheckouts());
         },
         label: const Row(children: [Icon(Icons.add), Text("Checkout")]),

@@ -1,4 +1,5 @@
 import 'package:checkout/globals.dart' as globals;
+import 'package:checkout/pages/dashboard.dart';
 import 'package:checkout/services/auth/get_redirect.dart';
 import 'package:checkout/services/routing/auth_redirect.dart';
 import 'package:checkout/shared/appbar/appbar.dart';
@@ -12,11 +13,13 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getAuthRedirect(true, false).then((value) {
-        if (value != "/login") {
+        if (value.runtimeType != LoginPage) {
           if (value != null) {
-            Navigator.of(context).pushReplacementNamed(value);
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => value),);
           } else {
-            Navigator.of(context).pushReplacementNamed("/dashboard");
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const DashboardPage()),);
           }
         }
       });

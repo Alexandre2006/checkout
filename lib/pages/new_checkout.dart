@@ -25,7 +25,8 @@ class _NewCheckoutPageState extends State<NewCheckoutPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getAuthRedirect(true, false).then((value) {
         if (value != null) {
-          Navigator.of(context).pushReplacementNamed(value);
+          Navigator.of(context)
+              .pushReplacement(MaterialPageRoute(builder: (context) => value));
         }
       });
     });
@@ -34,7 +35,10 @@ class _NewCheckoutPageState extends State<NewCheckoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const DefaultAppBar(pageTitle: "New Checkout"),
+      appBar: const DefaultAppBar(
+        pageTitle: "New Checkout",
+        showAuth: false,
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           if (equipment.isNotEmpty) {

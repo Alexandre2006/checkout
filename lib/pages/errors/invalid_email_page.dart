@@ -1,4 +1,5 @@
 import 'package:checkout/globals.dart' as globals;
+import 'package:checkout/pages/login_page.dart';
 import 'package:flutter/material.dart';
 
 class InvalidEmailPage extends StatelessWidget {
@@ -29,9 +30,9 @@ class InvalidEmailPage extends StatelessWidget {
                 FilledButton.icon(
                   onPressed: () {
                     globals.supabase.auth.signOut();
-                    Navigator.pushNamedAndRemoveUntil(
+                    Navigator.pushAndRemoveUntil(
                       context,
-                      '/',
+                      MaterialPageRoute(builder: (context) => const LoginPage()),
                       (route) => false,
                     );
                   },

@@ -1,4 +1,6 @@
 import 'package:checkout/globals.dart' as globals;
+import 'package:checkout/pages/dashboard.dart';
+import 'package:checkout/pages/settings_page.dart';
 import 'package:checkout/services/auth/get_redirect.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -24,7 +26,9 @@ class _AppBarAuthState extends State<AppBarAuth> {
   void initState() {
     super.initState();
     globals.supabase.auth.onAuthStateChange.listen((data) {
-      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        setState(() {});
+      });
     });
   }
 
@@ -40,7 +44,12 @@ class _AppBarAuthState extends State<AppBarAuth> {
         onPressed: ModalRoute.of(context)?.settings.name == '/settings'
             ? null
             : () {
-                Navigator.pushNamed(context, '/settings');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsPage(),
+                  ),
+                );
               },
         child: Row(
           children: [
@@ -71,7 +80,9 @@ class _AppBarAuthState extends State<AppBarAuth> {
       padding: const EdgeInsets.all(8.0),
       child: FilledButton.icon(
         onPressed: () {
-          Navigator.of(context).pushReplacementNamed('/dashboard');
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const DashboardPage()),
+          );
         },
         icon: const Text("Dashboard"),
         label: const Icon(Icons.arrow_forward),

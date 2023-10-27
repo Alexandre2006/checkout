@@ -1,8 +1,12 @@
 import 'package:checkout/globals.dart' as globals;
+import 'package:checkout/pages/errors/invalid_email_page.dart';
+import 'package:checkout/pages/errors/not_admin_page.dart';
+import 'package:checkout/pages/login_page.dart';
 import 'package:checkout/services/user/get_user.dart';
 import 'package:checkout/services/user/register_user.dart';
+import 'package:flutter/material.dart';
 
-Future<String?> getAuthRedirect(bool requireAuth, bool requireAdmin) async {
+Future<Widget?> getAuthRedirect(bool requireAuth, bool requireAdmin) async {
   final bool signedIn = globals.supabase.auth.currentUser != null;
   String email = "";
 
@@ -11,12 +15,12 @@ Future<String?> getAuthRedirect(bool requireAuth, bool requireAdmin) async {
   }
 
   if (requireAuth && !signedIn) {
-    return "/login";
+    return const LoginPage();
   } else if (requireAuth && !email.endsWith("@menloschool.org")) {
-    return "/invalidemail";
+    return const InvalidEmailPage();
   } else if (requireAdmin) {
     if (!(await getCurrentUser()).admin) {
-      return "/notadmin";
+      return const NotAdminPage();
     }
   }
   registerUser();

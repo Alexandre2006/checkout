@@ -1,4 +1,6 @@
 import 'package:checkout/globals.dart' as globals;
+import 'package:checkout/pages/dashboard.dart';
+import 'package:checkout/pages/login_page.dart';
 import 'package:flutter/material.dart';
 
 class NotAdminPage extends StatelessWidget {
@@ -29,11 +31,18 @@ class NotAdminPage extends StatelessWidget {
                 FilledButton.icon(
                   onPressed: () {
                     if (globals.supabase.auth.currentUser != null) {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/dashboard', (route) => false,);
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const DashboardPage(),),
+                        (route) => false,
+                      );
                     } else {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/', (route) => false,);
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                        (route) => false,
+                      );
                     }
                   },
                   icon: const Icon(Icons.arrow_back),

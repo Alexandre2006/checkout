@@ -11,7 +11,7 @@ final routes = <String, WidgetBuilder>{
   // Main Pages
   '/dashboard': (context) => const DashboardPage(),
   '/settings': (context) => const SettingsPage(),
-  '/login': (context) => const LoginPage(),
+  '/': (context) => const LoginPage(),
 
   // Creation Pages
   '/newcheckout': (context) => const NewCheckoutPage(),

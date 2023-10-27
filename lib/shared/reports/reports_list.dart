@@ -1,4 +1,5 @@
 import 'package:checkout/models/report.dart';
+import 'package:checkout/pages/new_report.dart';
 import 'package:checkout/services/reports/get_report.dart';
 import 'package:checkout/shared/reports/report_tile.dart';
 import 'package:checkout/shared/reports/report_view.dart';
@@ -56,7 +57,8 @@ class _ReportListState extends State<ReportList> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.pushNamed(context, "/newreport")
+          Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const NewReportPage()),)
               .then((value) => _refreshReports());
         },
         label: const Row(children: [Icon(Icons.add), Text("Report")]),
