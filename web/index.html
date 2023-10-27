@@ -41,6 +41,104 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+  <!-- Loading Screen (with title and loader) -->
+  <div id="flutter-loading">
+    <div class="wrapper">
+      <div class="title">Yearbook Checkout</div>
+      <div class="loader">
+        <div class="dot dot1"></div>
+        <div class="dot dot2"></div>
+        <div class="dot dot3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading screen styles -->
+  <style type="text/css">
+    #flutter-loading {
+      background-color: #1C1B1F;
+      color: #E5E1E5;
+      font-family: Roboto;
+      font-size: 14px;
+      height: 100%;
+      left: 0px;
+      position: absolute;
+      text-align: center;
+      top: 0px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    #flutter-loading .wrapper {
+      width: 100%;
+    }
+    #flutter-loading .title {
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 0.4px;
+      line-height: 36px;
+      margin-bottom: 32px;
+    }
+    #flutter-loading .loader {
+      display: inline
+    }
+    #flutter-loading .dot {
+      background-color: #E5E1E5;
+      border-radius: 4px;
+      display: inline-block;
+      height: 8px;
+      margin: 0 4px;
+      width: 8px;
+    }
+    #flutter-loading .dot1 {
+      animation: dot1 1.2s infinite;
+    }
+    #flutter-loading .dot2 {
+      animation: dot2 1.2s infinite;
+      animation-delay: 0.4s;
+    }
+    #flutter-loading .dot3 {
+      animation: dot3 1.2s infinite;
+      animation-delay: 0.8s;
+    }
+    @keyframes dot1 {
+      0% {
+        transform: translate(0px, 0px);
+      }
+      50% {
+        transform: translate(0px, -24px);
+      }
+      100% {
+        transform: translate(0px, 0px);
+      }
+    }
+    @keyframes dot2 {
+      0% {
+        transform: translate(0px, 0px);
+      }
+      50% {
+        transform: translate(0px, -24px);
+      }
+      100% {
+        transform: translate(0px, 0px);
+      }
+    }
+    @keyframes dot3 {
+      0% {
+        transform: translate(0px, 0px);
+      }
+      50% {
+        transform: translate(0px, -24px);
+      }
+      100% {
+        transform: translate(0px, 0px);
+      }
+    }
+  </style>
+  
+  <!-- Flutter -->
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js

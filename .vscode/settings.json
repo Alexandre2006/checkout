@@ -1,6 +1,6 @@
 {
     "dart.flutterRunAdditionalArgs": [
         "--web-port=3000",
-        "--web-renderer=html"
+        "--web-renderer=canvaskit"
     ]
 }

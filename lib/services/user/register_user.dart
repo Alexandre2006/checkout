@@ -6,10 +6,10 @@ Future<void> registerUser() async {
     final response = await globals.supabase
         .from('users')
         .select()
-        .eq('uuid', globals.supabase.auth.currentUser!.id);
+        .eq('id', globals.supabase.auth.currentUser!.id);
     if (response != null) {
       globals.supabase.from('users').update({
-        'uuid': globals.supabase.auth.currentUser!.id,
+        'id': globals.supabase.auth.currentUser!.id,
         'profile_picture':
             globals.supabase.auth.currentUser!.userMetadata!['avatar_url'],
       });
@@ -21,7 +21,7 @@ Future<void> registerUser() async {
   // Register user
   globals.supabase.from('users').insert(
     {
-      'uuid': globals.supabase.auth.currentUser!.id,
+      'id': globals.supabase.auth.currentUser!.id,
       'name': globals.supabase.auth.currentUser!.userMetadata?['name'],
       'email': globals.supabase.auth.currentUser!.email,
       'profile_picture':
