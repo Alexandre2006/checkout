@@ -31,7 +31,7 @@ Future<CheckoutUser> getCurrentUser() async {
   try {
     return getUser(globals.supabase.auth.currentUser!.id);
   } catch (error) {
-    registerUser();
+    await registerUser();
   }
 
   try {

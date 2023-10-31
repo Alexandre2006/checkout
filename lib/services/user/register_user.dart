@@ -14,12 +14,12 @@ Future<void> registerUser() async {
             globals.supabase.auth.currentUser!.userMetadata!['avatar_url'],
       });
     }
-  } catch (error) {
-    throw Exception("Error checking if user exists: $error");
+  } catch (ignore) {
+    // User does not exist
   }
 
   // Register user
-  globals.supabase.from('users').insert(
+  await globals.supabase.from('users').insert(
     {
       'id': globals.supabase.auth.currentUser!.id,
       'name': globals.supabase.auth.currentUser!.userMetadata?['name'],
