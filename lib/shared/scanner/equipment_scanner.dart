@@ -31,8 +31,8 @@ Future<CheckoutEquipment?> scanEquipment(
           canPop: false,
           scanWindow: Rect.fromCenter(
             center: Offset.zero,
-            width: double.infinity,
-            height: double.infinity,
+            width: 256,
+            height: 256,
           ),
           onScan: (value) {
             log("HI!");
