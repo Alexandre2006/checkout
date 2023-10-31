@@ -15,18 +15,16 @@ Future<void> registerUser() async {
       });
     }
   } catch (ignore) {
-    // User does not exist
+    // Register user
+    await globals.supabase.from('users').insert(
+      {
+        'id': globals.supabase.auth.currentUser!.id,
+        'name': globals.supabase.auth.currentUser!.userMetadata?['name'],
+        'email': globals.supabase.auth.currentUser!.email,
+        'profile_picture':
+            globals.supabase.auth.currentUser!.userMetadata!['avatar_url'],
+        'admin': false,
+      },
+    );
   }
-
-  // Register user
-  await globals.supabase.from('users').insert(
-    {
-      'id': globals.supabase.auth.currentUser!.id,
-      'name': globals.supabase.auth.currentUser!.userMetadata?['name'],
-      'email': globals.supabase.auth.currentUser!.email,
-      'profile_picture':
-          globals.supabase.auth.currentUser!.userMetadata!['avatar_url'],
-      'admin': false,
-    },
-  );
 }

@@ -9,29 +9,42 @@ class ReportTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        if (MediaQuery.of(context).size.width > 360)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              radius: 24,
-              foregroundImage: NetworkImage(
-                report.reporter.profilePicture,
+        Flexible(
+          child: Row(
+            children: [
+              if (MediaQuery.of(context).size.width > 400)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                    radius: 24,
+                    foregroundImage: NetworkImage(
+                      report.reporter.profilePicture,
+                    ),
+                  ),
+                ),
+              Flexible(
+                fit: FlexFit.tight,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      report.reporter.name,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      report.title,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      "Created on: ${report.createdAt.month}/${report.createdAt.day}/${report.createdAt.year}",
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(report.reporter.name),
-            Text(
-              report.title,
-            ),
-            Text(
-              "Created on: ${report.createdAt.month}/${report.createdAt.day}/${report.createdAt.year}",
-            ),
-          ],
         ),
-        const Spacer(),
         Padding(
           padding: const EdgeInsets.only(right: 8),
           child: SizedBox(
