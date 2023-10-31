@@ -19,6 +19,8 @@ Future<CheckoutEquipment?> scanEquipment(
   await Navigator.of(context).push(
     MaterialPageRoute(
       builder: (context) => MobileScanner(
+        controller: MobileScannerController(
+            detectionSpeed: DetectionSpeed.unrestricted),
         overlay: const ScannerOverlay(),
         onDetect: (value) {
           if (!canScan) {
