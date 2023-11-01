@@ -12,7 +12,7 @@ class ReportTile extends StatelessWidget {
         Flexible(
           child: Row(
             children: [
-              if (MediaQuery.of(context).size.width > 400)
+              if (MediaQuery.of(context).size.width > 360)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CircleAvatar(
