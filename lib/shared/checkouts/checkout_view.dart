@@ -99,7 +99,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                     ),
                     OutlinedButton(
                       onPressed: editableCheckout.start
-                                  .add(const Duration(days: 7))
+                                  .add(const Duration(days: 365))
                                   .isAfter(DateTime.now()) &&
                               !editableCheckout.returned
                           ? () {
@@ -112,7 +112,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                                       : editableCheckout.end,
                                   firstDate: DateTime.now(),
                                   lastDate: editableCheckout.start.add(
-                                    const Duration(days: 7),
+                                    const Duration(days: 365),
                                   ),
                                 ).then(
                                   (value) {

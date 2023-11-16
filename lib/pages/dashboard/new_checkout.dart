@@ -88,7 +88,7 @@ class _NewCheckoutPageState extends State<NewCheckoutPage> {
                       initialDate: endDate,
                       firstDate: DateTime.now(),
                       lastDate: DateTime.now().add(
-                        const Duration(days: 7),
+                        const Duration(days: 365),
                       ),
                     ).then(
                       (value) {
