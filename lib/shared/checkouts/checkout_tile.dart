@@ -51,7 +51,14 @@ class CheckoutTile extends StatelessWidget {
               ),
               child: checkout.returned
                   ? const Text("Returned")
-                  : checkout.end.isAfter(DateTime.now())
+                  : checkout.end
+                          .copyWith(
+                              hour: 23,
+                              minute: 59,
+                              second: 59,
+                              millisecond: 999,
+                              microsecond: 999)
+                          .isAfter(DateTime.now())
                       ? const Text("Ongoing")
                       : const Text("Late"),
             ),
