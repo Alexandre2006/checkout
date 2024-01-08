@@ -44,7 +44,15 @@ class CheckoutTile extends StatelessWidget {
                 foregroundColor: const MaterialStatePropertyAll(Colors.white),
                 backgroundColor: checkout.returned
                     ? const MaterialStatePropertyAll(Colors.grey)
-                    : checkout.end.isAfter(DateTime.now())
+                    : checkout.end
+                            .copyWith(
+                              hour: 23,
+                              minute: 59,
+                              second: 59,
+                              millisecond: 999,
+                              microsecond: 999,
+                            )
+                            .isAfter(DateTime.now())
                         ? MaterialStatePropertyAll(Colors.green.withAlpha(128))
                         : MaterialStatePropertyAll(Colors.red.withAlpha(128)),
                 padding: const MaterialStatePropertyAll(EdgeInsets.zero),
@@ -53,11 +61,12 @@ class CheckoutTile extends StatelessWidget {
                   ? const Text("Returned")
                   : checkout.end
                           .copyWith(
-                              hour: 23,
-                              minute: 59,
-                              second: 59,
-                              millisecond: 999,
-                              microsecond: 999)
+                            hour: 23,
+                            minute: 59,
+                            second: 59,
+                            millisecond: 999,
+                            microsecond: 999,
+                          )
                           .isAfter(DateTime.now())
                       ? const Text("Ongoing")
                       : const Text("Late"),
