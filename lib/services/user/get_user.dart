@@ -9,7 +9,7 @@ Future<CheckoutUser> getUser(String uuid) async {
       .select()
       .eq('id', uuid)
       .limit(1)
-      .single();
+      .maybeSingle();
 
   try {
     // Parse response
@@ -29,13 +29,16 @@ Future<CheckoutUser> getUser(String uuid) async {
 
 Future<CheckoutUser> getCurrentUser() async {
   try {
-    return getUser(globals.supabase.auth.currentUser!.id);
+    final CheckoutUser user =
+        await getUser(globals.supabase.auth.currentUser!.id);
+    await updateUser();
+    return user;
   } catch (error) {
     await registerUser();
   }
 
   try {
-    return getUser(globals.supabase.auth.currentUser!.id);
+    return await getUser(globals.supabase.auth.currentUser!.id);
   } catch (error) {
     throw Exception("Error getting current user: $error");
   }

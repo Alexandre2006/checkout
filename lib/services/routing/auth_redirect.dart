@@ -3,7 +3,6 @@ import 'package:checkout/pages/auth/login_page.dart';
 import 'package:checkout/pages/errors/invalid_email_page.dart';
 import 'package:checkout/pages/errors/not_admin_page.dart';
 import 'package:checkout/services/user/get_user.dart';
-import 'package:checkout/services/user/register_user.dart';
 import 'package:flutter/material.dart';
 
 Future<Widget?> getAuthRedirect(bool requireAuth, bool requireAdmin) async {
@@ -23,6 +22,6 @@ Future<Widget?> getAuthRedirect(bool requireAuth, bool requireAdmin) async {
       return const NotAdminPage();
     }
   }
-  await registerUser();
+  await getCurrentUser();
   return null;
 }
